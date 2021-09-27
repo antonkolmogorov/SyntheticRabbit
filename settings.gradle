@@ -1,0 +1,4 @@
+rootProject.name = 'SyntheticRabbit'
+include 'RequestHandler'
+include 'DBManager'
+

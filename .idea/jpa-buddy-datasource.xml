@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JpbDataSourceConfig">
+    <data-sources>
+      <data-source id="77aa9fe3-9e51-40ed-bc24-dd6430e986db" name="SyntheticRabbit" url="jdbc:postgresql://localhost/rabbit_db" driverClass="org.postgresql.Driver" />
+    </data-sources>
+  </component>
+</project>
