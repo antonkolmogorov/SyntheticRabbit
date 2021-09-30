@@ -36,8 +36,7 @@ public class RequestController {
 
     @RequestMapping("/create0")
     public Object send() {
-        return template.convertSendAndReceive(userQueue,
-                new User("login", "password", "name", "surname", "email"));
+        return createUser("login", "password", "name", "surname", "email");
     }
 
 }
