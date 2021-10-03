@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+  requesthandler:
+    build: RequestHandler/
+    ports:
+      - 8080:8080
+    restart: always
+    environment:
+      - SYNTHETICRABBIT_URL=rabbit
+
+  dbmanager:
+    build: DBManager/
+    restart: always
+    environment:
+      - SPRING_DATASOURCE_URL=db
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SYNTHETICRABBIT_URL=rabbit
+
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+
+  rabbit:
+    image: rabbitmq
+    restart: always

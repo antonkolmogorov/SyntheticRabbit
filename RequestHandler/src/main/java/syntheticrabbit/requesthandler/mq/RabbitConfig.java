@@ -14,6 +14,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class RabbitConfig {
 
+    @Value("syntheticrabbit.url")
+    private String url;
+
     @Value("${syntheticrabbit.queue.id}")
     private String idQueue;
 
@@ -23,7 +26,7 @@ public class RabbitConfig {
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory =
-                new CachingConnectionFactory("localhost");
+                new CachingConnectionFactory(url);
         return connectionFactory;
     }
 

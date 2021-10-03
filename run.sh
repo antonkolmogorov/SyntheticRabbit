@@ -1,7 +1,9 @@
 chmod +x ./gradlew
 
-./gradlew build
+./gradlew clean bootJar
 
 docker build -t requesthandler ./RequestHandler/
-docker run -d --rm -p 8080:8080 requesthandler
+
+docker-compose
+#docker run --rm -p 8080:8080 requesthandler
 
