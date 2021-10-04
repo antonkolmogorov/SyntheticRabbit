@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RabbitConfig {
 
-    @Value("syntheticrabbit.url")
+    @Value("${syntheticrabbit.url}")
     private String url;
 
     @Value("${syntheticrabbit.queue.id}")
