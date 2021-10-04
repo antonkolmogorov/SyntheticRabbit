@@ -1,3 +1,3 @@
-./gradlew clean bootJar
-
-docker-compose build .
+call ./gradlew.bat clean bootJar
+docker-compose build
+docker-compose start

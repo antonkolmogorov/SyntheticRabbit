@@ -22,7 +22,7 @@ public class RequestController {
     @RequestMapping("/get")
     public Object createUser(@RequestParam(required = true) Long id) {
         Object user = template.convertSendAndReceive(idQueue, id);
-        return user == null ? "no user found" : user;
+        return user == null ? "User not found" : user;
     }
 
     @RequestMapping("/create")
