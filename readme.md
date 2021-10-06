@@ -35,3 +35,8 @@ one with given id in the DB.
 
 ## Installation
 
+Requirements: Java 8+, Gradle and Docker installed 
+
+Windows - run.bat
+
+Linux - run.sh

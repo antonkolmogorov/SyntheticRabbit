@@ -1,41 +1,34 @@
 package syntheticrabbit.requesthandler;
 
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import syntheticrabbit.requesthandler.mq.MQController;
 
 @RestController
 public class RequestController {
 
     @Autowired
-    private AmqpTemplate template;
-
-    @Value("${syntheticrabbit.queue.id}")
-    private String idQueue;
-
-    @Value("${syntheticrabbit.queue.user}")
-    private String userQueue;
+    private MQController controller;
 
     @RequestMapping("/get")
-    public Object createUser(@RequestParam(required = true) Long id) {
-        Object user = template.convertSendAndReceive(idQueue, id);
-        return user == null ? "User not found" : user;
+    public Flux<String> get(@RequestParam Long id) {
+        return controller.getUserById(id);
     }
 
     @RequestMapping("/create")
-    public Object createUser(@RequestParam(required = true) String login,
-                             @RequestParam(required = true) String password,
-                             @RequestParam(required = true) String name,
-                             @RequestParam(required = true) String surname,
-                             @RequestParam(required = true) String email) {
-        return template.convertSendAndReceive(userQueue, new User(login, password, name, surname, email));
+    public Flux<String> createUser(@RequestParam String login,
+                                   @RequestParam String password,
+                                   @RequestParam String name,
+                                   @RequestParam String surname,
+                                   @RequestParam String email) {
+        return controller.createUser(new User(login, password, name, surname, email));
     }
 
     @RequestMapping("/create0")
-    public Object send() {
+    public Flux<String> createDefault() {
         return createUser("login", "password", "name", "surname", "email");
     }
 
