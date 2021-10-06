@@ -20,50 +20,61 @@ public class MQController {
     @Value("${syntheticrabbit.queue.user}")
     private String userQueue;
 
-    private Flux<String> get(String queue, Object o) {
-        Carrier carrier = new Carrier();
+    private Flux<String> getFlux(Carrier carrier, String operation) {
         return Mono.<String>create(s -> {
             carrier.listener = data -> s.success(data);
-            carrier.carry(queue, o);
+            carrier.carry(operation);
         }).repeat(1);
     }
 
     public Flux<String> getUserById(long id) {
-        Carrier carrier = new Carrier();
-//        carrier.compute(template.convertSendAndReceive(idQueue, id));
-//        Object user = template.convertSendAndReceive(idQueue, id);
-//        return user == null ? "User not found" : user;
-        return null;
+        Carrier carrier = new Carrier() {
+            @Override
+            void finish() {
+                Object user = template.convertSendAndReceive(idQueue, id);
+                String result = user == null ? "user not found" : user.toString();
+                listener.onResult(result);
+            }
+        };
+        return getFlux(carrier, String.format("Searching for user with id %d: ", id));
     }
 
     public Flux<String> createUser(User user) {
-
-        return null;
+        Carrier carrier = new Carrier() {
+            @Override
+            void finish() {
+                Object created = template.convertSendAndReceive(userQueue, user);
+                String result = created == null ? "user was not created" : created.toString();
+                listener.onResult(result);
+            }
+        };
+        return getFlux(carrier, String.format("Creating user %s: ", user.toString()));
     }
 
     private interface Listener {
         void onResult(String result);
     }
 
-    private class Carrier {
+    private abstract class Carrier {
         boolean busy = false;
         Listener listener;
 
-        void carry(String queue, Object o) {
+        void carry(String string) {
             if (busy) {
                 return;
             }
             busy = true;
             new Thread(() -> {
-                listener.onResult("Doing something: ");
+                listener.onResult(string);
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
                 }
-                String result = template.convertSendAndReceive(queue, o).toString(); // TODO:
-                listener.onResult(result);
+                finish();
             }).start();
         }
+
+        abstract void finish();
     }
 
 }
