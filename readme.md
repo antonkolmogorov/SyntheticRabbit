@@ -13,7 +13,7 @@ a new User, or get the existing one.
 ### REST API:
 
 `/get?id={user id}` returns JSON representation of the User object if there is one with id provided. If no User object 
-with this id found in DB, "no user found" message will be shown.
+with this id found in DB, "user not found" message will be shown.
 
 `/create?login={login}&password={password}&name={name}&surname={surname}&email={email}` creates User with given 
 credentials in DB and returns it's JSON representation.
