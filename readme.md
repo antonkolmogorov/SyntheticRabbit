@@ -33,10 +33,20 @@ one with given id in the DB.
 
 `datetime` - user creation datetime
 
+## Requirements
+
+Java 8+, Gradle and Docker with docker-compose installed 
+
 ## Installation
 
-Requirements: Java 8+, Gradle and Docker installed 
+git clone https://github.com/antonkolmogorov/SyntheticRabbit.git
 
-Windows - run.bat
+cd SyntheticRabbit
 
-Linux - run.sh
+./gradlew clean bootJar
+
+docker-compose build
+
+## Run
+
+docker-compose up
