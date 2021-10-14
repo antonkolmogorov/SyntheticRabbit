@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import syntheticrabbit.requesthandler.User;
+import syntheticrabbit.requesthandler.UserDto;
 
 @Component
 public class MQController {
@@ -39,7 +39,7 @@ public class MQController {
         return getFlux(carrier, String.format("Searching for user with id %d: ", id));
     }
 
-    public Flux<String> createUser(User user) {
+    public Flux<String> createUser(UserDto user) {
         Carrier carrier = new Carrier() {
             @Override
             void finish() {
