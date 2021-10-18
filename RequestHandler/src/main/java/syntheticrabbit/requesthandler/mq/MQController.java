@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import syntheticrabbit.requesthandler.User;
+import syntheticrabbit.requesthandler.UserDto;
 
 @Component
 public class MQController {
@@ -14,15 +14,15 @@ public class MQController {
     @Autowired
     private AmqpTemplate template;
 
-    @Value("${syntheticrabbit.queue.id}")
-    private String idQueue;
+    @Value("${syntheticrabbit.queue.getuser}")
+    private String getUserQueue;
 
-    @Value("${syntheticrabbit.queue.user}")
-    private String userQueue;
+    @Value("${syntheticrabbit.queue.createuser}")
+    private String createUserQueue;
 
     private Flux<String> getFlux(Carrier carrier, String operation) {
         return Mono.<String>create(s -> {
-            carrier.listener = data -> s.success(data);
+            carrier.listener = s::success;
             carrier.carry(operation);
         }).repeat(1);
     }
@@ -31,7 +31,7 @@ public class MQController {
         Carrier carrier = new Carrier() {
             @Override
             void finish() {
-                Object user = template.convertSendAndReceive(idQueue, id);
+                Object user = template.convertSendAndReceive(getUserQueue, id);
                 String result = user == null ? "user not found" : user.toString();
                 listener.onResult(result);
             }
@@ -39,12 +39,12 @@ public class MQController {
         return getFlux(carrier, String.format("Searching for user with id %d: ", id));
     }
 
-    public Flux<String> createUser(User user) {
+    public Flux<String> createUser(UserDto user) {
         Carrier carrier = new Carrier() {
             @Override
             void finish() {
-                Object created = template.convertSendAndReceive(userQueue, user);
-                String result = created == null ? "user was not created" : created.toString();
+                Object created = template.convertSendAndReceive(createUserQueue, user);
+                String result = created == null ? "user not created" : created.toString();
                 listener.onResult(result);
             }
         };

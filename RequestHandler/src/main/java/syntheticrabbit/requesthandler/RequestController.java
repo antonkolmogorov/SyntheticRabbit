@@ -24,7 +24,7 @@ public class RequestController {
                                    @RequestParam String name,
                                    @RequestParam String surname,
                                    @RequestParam String email) {
-        return controller.createUser(new User(login, password, name, surname, email));
+        return controller.createUser(new UserDto(login, password, name, surname, email));
     }
 
     @RequestMapping("/create0")

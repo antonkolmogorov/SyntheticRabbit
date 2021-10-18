@@ -17,17 +17,15 @@ public class RabbitConfig {
     @Value("${syntheticrabbit.url}")
     private String url;
 
-    @Value("${syntheticrabbit.queue.id}")
-    private String idQueue;
+    @Value("${syntheticrabbit.queue.getuser}")
+    private String getUserQueue;
 
-    @Value("${syntheticrabbit.queue.user}")
-    private String userQueue;
+    @Value("${syntheticrabbit.queue.createuser}")
+    private String createUserQueue;
 
     @Bean
     public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory connectionFactory =
-                new CachingConnectionFactory(url);
-        return connectionFactory;
+        return new CachingConnectionFactory(url);
     }
 
     @Bean
@@ -47,12 +45,12 @@ public class RabbitConfig {
 
     @Bean
     public Queue idQueue() {
-        return new Queue(idQueue);
+        return new Queue(getUserQueue);
     }
 
     @Bean
     public Queue userQueue() {
-        return new Queue(userQueue);
+        return new Queue(createUserQueue);
     }
 
     @Bean
