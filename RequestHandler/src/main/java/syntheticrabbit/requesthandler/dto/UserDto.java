@@ -1,4 +1,4 @@
-package syntheticrabbit.requesthandler;
+package syntheticrabbit.requesthandler.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

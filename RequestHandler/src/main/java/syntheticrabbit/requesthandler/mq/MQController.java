@@ -1,18 +1,21 @@
 package syntheticrabbit.requesthandler.mq;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import syntheticrabbit.requesthandler.UserDto;
+import syntheticrabbit.requesthandler.dto.UserDto;
 
 @Component
+@RequiredArgsConstructor
 public class MQController {
 
-    @Autowired
-    private AmqpTemplate template;
+    private final TaskExecutor taskExecutor;
+
+    private final AmqpTemplate template;
 
     @Value("${syntheticrabbit.queue.getuser}")
     private String getUserQueue;
@@ -64,14 +67,15 @@ public class MQController {
                 return;
             }
             busy = true;
-            new Thread(() -> {
-                listener.onResult(string);
+            listener.onResult(string);
+            taskExecutor.execute(() -> {
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 finish();
-            }).start();
+            });
         }
 
         abstract void finish();
