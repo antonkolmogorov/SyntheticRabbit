@@ -11,7 +11,6 @@ import java.util.Date;
 @Setter
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "user", schema = "public")
 public class User implements Serializable {

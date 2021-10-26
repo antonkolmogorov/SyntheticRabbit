@@ -13,14 +13,12 @@ public class RabbitMQListener {
     private final UserRepository userRepository;
 
     @RabbitListener(queues = "${syntheticrabbit.queue.createuser}")
-    public String listenCreateUserQueue(User user) {
-        return userRepository.save(user).toString();
+    public User listenCreateUserQueue(User user) {
+        return userRepository.save(user);
     }
 
     @RabbitListener(queues = "${syntheticrabbit.queue.getuser}")
-    public String listenGetUserQueue(Long id) {
-        User user = userRepository.findById(id).orElse(null);
-        return user == null ? "User not found" : user.toString();
+    public User listenGetUserQueue(Long id) {
+        return userRepository.findById(id).orElse(null);
     }
-
 }
